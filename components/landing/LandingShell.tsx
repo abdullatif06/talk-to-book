@@ -6,6 +6,7 @@
 import { useLanding } from "@/lib/i18n";
 import LandingHeader from "./LandingHeader";
 import Hero from "./Hero";
+import DestinationsParallax from "./DestinationsParallax";
 import Services from "./Services";
 import PopularDestinations from "./PopularDestinations";
 import BookSteps from "./BookSteps";
@@ -21,6 +22,7 @@ export default function LandingShell() {
     <div dir={copy.dir} className="flex flex-1 flex-col bg-white">
       <LandingHeader />
       <Hero />
+      <DestinationsParallax />
       <Services />
       <PopularDestinations />
       <BookSteps />

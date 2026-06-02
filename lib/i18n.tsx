@@ -141,6 +141,16 @@ const AR: LandingCopy = {
       name: "خالد المومني",
       role: "عمّان، الأردن",
     },
+    {
+      quote: "كنت أضيع وقت طويل في Booking. هنا قلت اللي أبيه بكلامي وخلصت بدقيقة.",
+      name: "فاطمة الزهراني",
+      role: "جدة، السعودية",
+    },
+    {
+      quote: "أهم شي إنه يبرز خيارات الحلال وقرب الحرم. مناسب للعائلة وصادق.",
+      name: "أحمد بن سالم",
+      role: "الدوحة، قطر",
+    },
   ],
   logos: ["Booking", "Agoda", "Expedia", "Trivago", "Airbnb"],
   newsletterTitle: "اشترك لتصلك أحدث العروض والأخبار من TalkToBook",
@@ -249,6 +259,16 @@ const EN: LandingCopy = {
       quote: "I love that it gets my dialect and gives an honest review summary. Saved me hours of searching.",
       name: "Khalid Al-Momani",
       role: "Amman, Jordan",
+    },
+    {
+      quote: "I used to waste ages on Booking. Here I just said what I wanted and was done in a minute.",
+      name: "Fatima Al-Zahrani",
+      role: "Jeddah, Saudi Arabia",
+    },
+    {
+      quote: "It surfaces halal options and proximity to the Haram. Family-friendly and honest.",
+      name: "Ahmad bin Salem",
+      role: "Doha, Qatar",
     },
   ],
   logos: ["Booking", "Agoda", "Expedia", "Trivago", "Airbnb"],

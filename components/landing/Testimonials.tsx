@@ -1,18 +1,21 @@
-// TalkToBook landing — "What people say about us" (Jadoo-style): heading on one
-// side, a quote card with avatar initial on the other.
+// TalkToBook landing — "What people say about us" with animated columns.
+// Two columns scroll vertically at different speeds (second hidden on mobile).
+// Masked top/bottom for a clean fade.
 "use client";
 
 import { useLanding } from "@/lib/i18n";
-import { Quote } from "lucide-react";
-import { Reveal, Stagger, RevealItem } from "@/components/motion/Reveal";
+import { Reveal } from "@/components/motion/Reveal";
+import { TestimonialsColumn } from "@/components/ui/testimonials-column";
 
 export default function Testimonials() {
   const { copy } = useLanding();
+  const col1 = copy.testimonials.slice(0, 2);
+  const col2 = copy.testimonials.slice(2, 4);
 
   return (
     <section className="bg-sand py-20">
-      <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 md:grid-cols-2">
-        <Reveal>
+      <div className="mx-auto max-w-5xl px-6">
+        <Reveal className="mb-12 text-center">
           <p className="text-sm font-bold uppercase tracking-wide text-ink-soft">
             {copy.testimonialsEyebrow}
           </p>
@@ -21,27 +24,14 @@ export default function Testimonials() {
           </h2>
         </Reveal>
 
-        <Stagger className="flex flex-col gap-5">
-          {copy.testimonials.map((t, i) => (
-            <RevealItem key={i}>
-              <figure className="relative rounded-3xl bg-white p-6 shadow-card">
-                <Quote className="absolute end-6 top-6 h-6 w-6 text-primary/30" />
-                <blockquote className="text-[15px] leading-relaxed text-ink/90">
-                  “{t.quote}”
-                </blockquote>
-                <figcaption className="mt-4 flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/12 font-bold text-primary">
-                    {t.name.charAt(0)}
-                  </span>
-                  <span>
-                    <span className="block text-sm font-bold text-ink">{t.name}</span>
-                    <span className="block text-xs text-ink-soft">{t.role}</span>
-                  </span>
-                </figcaption>
-              </figure>
-            </RevealItem>
-          ))}
-        </Stagger>
+        <div className="relative mx-auto flex max-h-[34rem] justify-center gap-6 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_12%,black_88%,transparent)]">
+          <TestimonialsColumn testimonials={col1} duration={16} />
+          <TestimonialsColumn
+            testimonials={col2.length ? col2 : col1}
+            duration={20}
+            className="hidden md:block"
+          />
+        </div>
       </div>
     </section>
   );
