@@ -10,6 +10,7 @@ import ChatInput from "./ChatInput";
 import MessageBubble from "./MessageBubble";
 import TypingIndicator from "./TypingIndicator";
 import HotelCard from "./HotelCard";
+import HotelCardSkeleton from "./HotelCardSkeleton";
 import SearchParams from "./SearchParams";
 import type {
   ChatMessage,
@@ -66,6 +67,7 @@ export default function ChatInterface() {
   const [lang, setLang] = useState<Lang>("ar");
   const [messages, setMessages] = useState<UiMessage[]>([welcomeMessage("ar")]);
   const [isTyping, setIsTyping] = useState(false);
+  const [searching, setSearching] = useState(false);
   const [params, setParams] = useState<Partial<TravelParams>>({});
   const [resultsShown, setResultsShown] = useState(false);
 
@@ -76,7 +78,7 @@ export default function ChatInterface() {
       top: scrollRef.current.scrollHeight,
       behavior: "smooth",
     });
-  }, [messages, isTyping]);
+  }, [messages, isTyping, searching]);
 
   function mergeParams(next?: Partial<TravelParams>) {
     if (!next) return;
@@ -156,7 +158,7 @@ export default function ChatInterface() {
 
   const runSearch = useCallback(async () => {
     if (!canSearch(params) || isTyping) return;
-    setIsTyping(true);
+    setSearching(true);
     try {
       const res = await fetch("/api/search", {
         method: "POST",
@@ -193,7 +195,7 @@ export default function ChatInterface() {
         },
       ]);
     } finally {
-      setIsTyping(false);
+      setSearching(false);
     }
   }, [params, isTyping, lang]);
 
@@ -202,6 +204,7 @@ export default function ChatInterface() {
     setParams({});
     setResultsShown(false);
     setIsTyping(false);
+    setSearching(false);
   }
 
   function handleNewTrip() {
@@ -216,8 +219,9 @@ export default function ChatInterface() {
     });
   }
 
-  const showExamples = messages.length === 1 && !isTyping;
-  const showSearchButton = canSearch(params) && !resultsShown && !isTyping;
+  const showExamples = messages.length === 1 && !isTyping && !searching;
+  const showSearchButton =
+    canSearch(params) && !resultsShown && !isTyping && !searching;
 
   return (
     <div
@@ -263,6 +267,15 @@ export default function ChatInterface() {
           )}
 
           {isTyping && <TypingIndicator />}
+
+          {/* Skeleton results while a hotel search is running */}
+          {searching && (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <HotelCardSkeleton />
+              <HotelCardSkeleton />
+              <HotelCardSkeleton />
+            </div>
+          )}
         </div>
       </div>
 

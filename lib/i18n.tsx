@@ -13,7 +13,8 @@ export type IconKey =
   | "hotel"
   | "shield"
   | "globe"
-  | "tag";
+  | "tag"
+  | "moon";
 
 export interface DestinationCopy {
   name: string;
@@ -51,6 +52,10 @@ export interface LandingCopy {
   destTitle: string;
   destSubtitle: string;
   destinations: DestinationCopy[];
+  // Bento feature grid (dark)
+  bentoTitle: string;
+  bentoSubtitle: string;
+  bento: { icon: IconKey; title: string; desc: string }[];
   // How it works
   howTitle: string;
   steps: { icon: IconKey; title: string; desc: string }[];
@@ -103,6 +108,16 @@ const AR: LandingCopy = {
     { value: "٣", label: "خيارات منتقاة لكل بحث" },
     { value: "٪١٠٠", label: "مجاني وبدون تسجيل" },
     { value: "عربي", label: "محادثة طبيعية" },
+  ],
+  bentoTitle: "ذكاء يفهم رحلتك",
+  bentoSubtitle: "مو مجرّد بحث — مساعد يفهم العربي ويختار لك بعناية",
+  bento: [
+    { icon: "chat", title: "محادثة بالعربي الطبيعي", desc: "اكتب مثل ما تتكلم مع صاحبك، بدون قوائم أو فلاتر. نفهم لهجتك ونرد بنفس لغتك." },
+    { icon: "sparkles", title: "٣ خيارات منتقاة", desc: "بدل ٨٠٠ نتيجة، نختار لك أفضل ٣ فنادق تناسب طلبك تماماً." },
+    { icon: "shield", title: "ملخص تقييمات صادق", desc: "نلخّص آراء النزلاء بالعربي — الإيجابيات والسلبيات بصراحة." },
+    { icon: "moon", title: "ملائم للمسلمين", desc: "نبرز الإشارات المهمة: قرب الحرم، خيارات حلال، أجواء عائلية." },
+    { icon: "globe", title: "مليون فندق", desc: "نتائج حقيقية من أكثر من مليون فندق حول العالم." },
+    { icon: "tag", title: "مجاني تماماً", desc: "بدون تسجيل، بدون رسوم. ابدأ رحلتك الآن." },
   ],
   destTitle: "وجهات يحبها المسافر العربي",
   destSubtitle: "اضغط على أي وجهة لتبدأ رحلتك فوراً",
@@ -178,6 +193,16 @@ const EN: LandingCopy = {
     { value: "3", label: "curated picks per search" },
     { value: "100%", label: "free, no sign-up" },
     { value: "Arabic", label: "natural conversation" },
+  ],
+  bentoTitle: "Intelligence that gets your trip",
+  bentoSubtitle: "Not just search — an assistant that understands Arabic and curates for you",
+  bento: [
+    { icon: "chat", title: "Natural Arabic chat", desc: "Type like you'd talk to a friend — no menus or filters. We get your dialect and reply in your language." },
+    { icon: "sparkles", title: "3 curated picks", desc: "Instead of 800 results, we hand you the best 3 hotels that truly fit." },
+    { icon: "shield", title: "Honest review summary", desc: "We summarize guest reviews in Arabic — the good and the bad, straight." },
+    { icon: "moon", title: "Muslim-friendly", desc: "We surface what matters: proximity to the Haram, halal options, family vibe." },
+    { icon: "globe", title: "A million hotels", desc: "Real results from over a million hotels worldwide." },
+    { icon: "tag", title: "Completely free", desc: "No sign-up, no fees. Start your trip right now." },
   ],
   destTitle: "Destinations Arab travelers love",
   destSubtitle: "Tap any destination to start your trip instantly",

@@ -26,6 +26,7 @@ export default function HotelCard({ hotel }: { hotel: Hotel }) {
     hotel.arabic_summary,
   );
   const [loadingSummary, setLoadingSummary] = useState(!hotel.arabic_summary);
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   useEffect(() => {
     if (hotel.arabic_summary) return;
@@ -57,16 +58,23 @@ export default function HotelCard({ hotel }: { hotel: Hotel }) {
   }, [hotel]);
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card transition-all hover:-translate-y-1 hover:shadow-card-hover">
+    <article className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/30 hover:shadow-card-hover">
       {/* Photo */}
       <div className="relative h-44 w-full overflow-hidden bg-panel">
+        {/* shimmer placeholder until the image loads */}
+        {hotel.image_url && !imgLoaded && (
+          <div className="shimmer absolute inset-0" aria-hidden />
+        )}
         {hotel.image_url ? (
           <Image
             src={hotel.image_url}
             alt={hotel.name_ar || hotel.name}
             fill
             sizes="(max-width: 640px) 100vw, 384px"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            onLoad={() => setImgLoaded(true)}
+            className={`object-cover transition-all duration-700 group-hover:scale-105 ${
+              imgLoaded ? "opacity-100" : "opacity-0"
+            }`}
           />
         ) : (
           <div className="flex h-full items-center justify-center text-ink-soft/40">

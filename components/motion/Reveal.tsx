@@ -1,12 +1,27 @@
 // TalkToBook — reusable scroll-reveal primitives (Motion).
-// Refined & purposeful: short ease-out entrances, gated by prefers-reduced-motion
-// (Motion's useReducedMotion), triggered once when entering the viewport.
+// Refined & purposeful: short ease-out entrances, gated by prefers-reduced-motion.
+//
+// Robustness: we use an explicit useInView ref PLUS a mount fallback timer. If
+// the in-view detection hasn't fired shortly after mount (e.g. smooth-scroll
+// quirks, deep-links, or headless capture), we reveal anyway — content must
+// never get stuck invisible.
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "motion/react";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { motion, useInView, useReducedMotion, type Variants } from "motion/react";
 
-const EASE = [0.22, 1, 0.36, 1] as const; // ease-out, premium feel
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+function useReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const [fallback, setFallback] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setFallback(true), 700);
+    return () => clearTimeout(t);
+  }, []);
+  return { ref, show: inView || fallback };
+}
 
 /** Fade + rise a single element into view (once). */
 export function Reveal({
@@ -21,12 +36,13 @@ export function Reveal({
   className?: string;
 }) {
   const reduced = useReducedMotion();
+  const { ref, show } = useReveal();
   return (
     <motion.div
+      ref={ref}
       className={className}
       initial={reduced ? false : { opacity: 0, y }}
-      whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
+      animate={reduced ? undefined : show ? { opacity: 1, y: 0 } : undefined}
       transition={{ duration: 0.5, ease: EASE, delay }}
     >
       {children}
@@ -34,7 +50,7 @@ export function Reveal({
   );
 }
 
-/** Container that staggers its <RevealItem> children as the group enters view. */
+/** Container that staggers its <RevealItem> children. */
 export function Stagger({
   children,
   className,
@@ -45,17 +61,18 @@ export function Stagger({
   gap?: number;
 }) {
   const reduced = useReducedMotion();
+  const { ref, show } = useReveal();
   const container: Variants = {
     hidden: {},
     show: { transition: { staggerChildren: reduced ? 0 : gap } },
   };
   return (
     <motion.div
+      ref={ref}
       className={className}
       variants={container}
       initial={reduced ? false : "hidden"}
-      whileInView={reduced ? undefined : "show"}
-      viewport={{ once: true, margin: "-80px" }}
+      animate={reduced ? undefined : show ? "show" : "hidden"}
     >
       {children}
     </motion.div>

@@ -1,14 +1,14 @@
-// TalkToBook landing — shell that assembles all sections and sets the page
-// direction from the selected language (RTL for Arabic, LTR for English).
+// TalkToBook landing — shell: dark aurora hero + bento (dark) up top, then the
+// clean light booking body below. Sets page direction from the language.
 "use client";
 
 import { useLanding } from "@/lib/i18n";
 import LandingHeader from "./LandingHeader";
 import Hero from "./Hero";
+import BentoFeatures from "./BentoFeatures";
 import StatsBand from "./StatsBand";
 import PopularDestinations from "./PopularDestinations";
 import HowItWorks from "./HowItWorks";
-import TrustSection from "./TrustSection";
 import Comparison from "./Comparison";
 import SampleConversation from "./SampleConversation";
 import Faq from "./Faq";
@@ -18,18 +18,18 @@ export default function LandingShell() {
   const { copy } = useLanding();
 
   return (
-    <div dir={copy.dir} className="flex flex-1 flex-col">
-      {/* Top: warm wash + subtle pattern behind nav & hero */}
-      <div className="hero-wash">
-        <div className="pattern-arabesque">
-          <LandingHeader />
-          <Hero />
-        </div>
+    <div dir={copy.dir} className="flex flex-1 flex-col bg-white">
+      {/* Dark tech zone: nav + hero + bento */}
+      <div className="bg-night">
+        <LandingHeader />
+        <Hero />
+        <BentoFeatures />
       </div>
+
+      {/* Light booking body */}
       <StatsBand />
       <PopularDestinations />
       <HowItWorks />
-      <TrustSection />
       <Comparison />
       <SampleConversation />
       <Faq />

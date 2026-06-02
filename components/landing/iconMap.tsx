@@ -8,6 +8,7 @@ import {
   ShieldCheck,
   Globe,
   Tag,
+  Moon,
   type LucideIcon,
 } from "lucide-react";
 import type { IconKey } from "@/lib/i18n";
@@ -19,6 +20,7 @@ const MAP: Record<IconKey, LucideIcon> = {
   shield: ShieldCheck,
   globe: Globe,
   tag: Tag,
+  moon: Moon,
 };
 
 export function Icon({ name, className }: { name: IconKey; className?: string }) {

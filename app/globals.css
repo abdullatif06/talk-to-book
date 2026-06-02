@@ -23,6 +23,11 @@
   --color-panel: #f5f7fa; /* cool panel tint */
   --color-line: #e6eaf0; /* hairline borders */
 
+  /* Dark canvas (AI/tech hero + bento section) */
+  --color-night: #0a1226; /* deep navy-black hero bg */
+  --color-night-soft: #111c38; /* raised dark panel */
+  --color-night-line: #24314f; /* dark hairline */
+
   /* Backwards-compatible brand aliases (older components reference these) */
   --color-brand-teal: #0a6ce0;
   --color-brand-light: #eef4fd;
@@ -110,4 +115,168 @@ body {
 }
 .animate-fade-up {
   animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ===========================================================================
+   AI / TECH effects (dark hero + glow). Brand blue/gold, balanced-bold.
+   All decorative; honor prefers-reduced-motion at the bottom.
+   ======================================================================== */
+
+/* Animated aurora background for the dark hero */
+@keyframes aurora-drift {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(4%, -3%, 0) rotate(8deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+}
+.aurora {
+  position: relative;
+  background-color: var(--color-night);
+  overflow: hidden;
+  isolation: isolate;
+}
+.aurora::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: -1;
+  background:
+    radial-gradient(40% 50% at 75% 20%, rgba(10, 108, 224, 0.55), transparent 70%),
+    radial-gradient(35% 45% at 20% 25%, rgba(232, 163, 61, 0.35), transparent 70%),
+    radial-gradient(45% 55% at 50% 90%, rgba(31, 138, 80, 0.28), transparent 70%);
+  filter: blur(40px);
+  animation: aurora-drift 18s ease-in-out infinite;
+}
+
+/* Faint tech grid overlay (sits over the dark hero) */
+.grid-overlay {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 40%, transparent 80%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 40%, transparent 80%);
+}
+
+/* Glow ring behind a focal element (e.g. the hero chat card) */
+.glow-card {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 20px 60px rgba(10, 108, 224, 0.35),
+    0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Conic border beam that travels around a card edge */
+@keyframes beam-spin {
+  to { transform: rotate(1turn); }
+}
+.border-beam {
+  position: relative;
+  isolation: isolate;
+}
+.border-beam::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--beam-angle, 0deg),
+    transparent 0deg,
+    var(--color-primary) 40deg,
+    var(--color-gold) 90deg,
+    transparent 130deg
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: beam-rotate 6s linear infinite;
+}
+@property --beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes beam-rotate {
+  to { --beam-angle: 360deg; }
+}
+
+/* Infinite horizontal marquee (destinations). Pauses on hover. */
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-50% - 0.5rem)); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1rem;
+  animation: marquee-x var(--marquee-duration, 40s) linear infinite;
+}
+/* RTL: drift the other way so motion reads naturally */
+[dir="rtl"] .marquee-track {
+  animation-direction: reverse;
+}
+.marquee-mask:hover .marquee-track {
+  animation-play-state: paused;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+/* Shimmer sweep for skeleton loaders */
+@keyframes shimmer-sweep {
+  100% { transform: translateX(100%); }
+}
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-panel);
+}
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.65),
+    transparent
+  );
+  animation: shimmer-sweep 1.4s infinite;
+}
+[dir="rtl"] .shimmer::after {
+  animation-direction: reverse;
+}
+
+/* Animated shiny text (gradient sweep across a headline/badge) */
+@keyframes shiny-text {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+.shiny-text {
+  background: linear-gradient(
+    110deg,
+    var(--color-ink-soft) 35%,
+    var(--color-primary) 50%,
+    var(--color-ink-soft) 65%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shiny-text 5s linear infinite;
+}
+
+/* Respect reduced motion: stop the decorative loops */
+@media (prefers-reduced-motion: reduce) {
+  .aurora::before,
+  .border-beam::before,
+  .marquee-track,
+  .shimmer::after,
+  .shiny-text {
+    animation: none !important;
+  }
 }
