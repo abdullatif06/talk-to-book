@@ -9,14 +9,17 @@ export default function LandingHeader() {
   const { copy } = useLanding();
 
   return (
-    <header className="flex flex-col items-center gap-4 px-6 pt-12 text-center">
-      <span className="text-2xl font-extrabold tracking-tight text-brand-teal">
-        {copy.brand}
-      </span>
-      <p className="max-w-xl text-base text-brand-dark/70">{copy.tagline}</p>
+    <header className="flex flex-col items-center gap-5 px-6 pt-16 text-center">
+      <div className="flex items-center gap-2 animate-fade-up">
+        <span className="text-3xl">🏨</span>
+        <span className="font-display text-3xl text-primary">{copy.brand}</span>
+      </div>
+      <p className="max-w-xl text-lg text-ink-soft animate-fade-up [animation-delay:80ms]">
+        {copy.tagline}
+      </p>
       <Link
         href="/chat"
-        className="rounded-full bg-brand-teal px-8 py-3 text-lg font-semibold text-white shadow-sm transition-colors hover:bg-brand-dark"
+        className="animate-fade-up rounded-full bg-primary px-9 py-3.5 text-lg font-bold text-white shadow-card transition-all hover:bg-primary-dark hover:shadow-card-hover [animation-delay:160ms]"
       >
         {copy.ctaStart}
       </Link>

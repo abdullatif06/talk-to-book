@@ -8,23 +8,25 @@ export default function LandingFooter() {
   const { copy, toggle } = useLanding();
 
   return (
-    <footer className="border-t border-brand-dark/10 bg-white">
-      <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 px-6 py-10 text-center">
+    <footer className="border-t border-line bg-ink text-white">
+      <div className="mx-auto flex max-w-5xl flex-col items-center gap-5 px-6 py-12 text-center">
+        <span className="font-display text-2xl text-white">{copy.brand}</span>
+
         <button
           type="button"
           onClick={toggle}
           aria-label="Toggle language"
-          className="rounded-full border border-brand-dark/15 px-4 py-1.5 text-sm font-semibold text-brand-dark transition-colors hover:bg-brand-light"
+          className="rounded-full border border-white/25 px-5 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
         >
           {copy.toggleLabel}
         </button>
 
-        <p className="text-sm text-brand-dark/70">{copy.footerCredit}</p>
+        <p className="text-sm text-white/70">{copy.footerCredit}</p>
 
         {/* Placeholder — swap "#" for your GitHub/portfolio URL later. */}
         <a
           href="#"
-          className="text-sm font-medium text-brand-teal hover:underline"
+          className="text-sm font-medium text-gold transition-colors hover:text-gold/80"
         >
           {copy.footerPortfolio}
         </a>

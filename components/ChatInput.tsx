@@ -45,7 +45,7 @@ export default function ChatInput({
           aria-label="إدخال صوتي (قريباً)"
           title="قريباً"
           disabled
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-brand-dark/40"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-ink-soft/40"
         >
           <MicIcon className="h-5 w-5" />
         </button>
@@ -57,7 +57,7 @@ export default function ChatInput({
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={PLACEHOLDER[lang]}
-          className="max-h-40 min-h-11 flex-1 resize-none rounded-2xl border border-brand-dark/15 bg-brand-light/40 px-4 py-2.5 text-[15px] leading-relaxed text-brand-dark outline-none transition-colors focus:border-brand-teal disabled:opacity-60"
+          className="max-h-40 min-h-11 flex-1 resize-none rounded-2xl border border-line bg-panel px-4 py-2.5 text-[15px] leading-relaxed text-ink outline-none transition-colors placeholder:text-ink-soft/60 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/15 disabled:opacity-60"
         />
 
         <button
@@ -65,7 +65,7 @@ export default function ChatInput({
           onClick={submit}
           disabled={disabled || !value.trim()}
           aria-label={lang === "ar" ? "إرسال" : "Send"}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-teal text-white transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-white shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-40"
         >
           {/* In RTL the send arrow should point right→left (toward the start) */}
           <SendIcon className="h-5 w-5 rotate-180" />

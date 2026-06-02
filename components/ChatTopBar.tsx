@@ -21,16 +21,17 @@ export default function ChatTopBar({
   const t = LABELS[lang];
 
   return (
-    <header className="flex items-center justify-between border-b border-brand-dark/10 bg-white/80 px-4 py-3 backdrop-blur">
-      <Link href="/" className="text-lg font-bold text-brand-teal">
-        TalkToBook
+    <header className="flex items-center justify-between border-b border-line bg-white/90 px-4 py-3 backdrop-blur-md">
+      <Link href="/" className="flex items-center gap-1.5">
+        <span className="text-xl">🏨</span>
+        <span className="font-display text-xl text-primary">TalkToBook</span>
       </Link>
 
       <div className="flex items-center gap-2">
         <button
           type="button"
           onClick={onNewTrip}
-          className="flex items-center gap-1.5 rounded-full border border-brand-teal/30 px-3 py-1.5 text-sm font-medium text-brand-teal transition-colors hover:bg-brand-light"
+          className="flex items-center gap-1.5 rounded-full border border-primary/25 px-3.5 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/5"
         >
           <PlusIcon className="h-4 w-4" />
           {t.newTrip}
@@ -40,7 +41,7 @@ export default function ChatTopBar({
           type="button"
           onClick={onToggleLang}
           aria-label="Toggle language"
-          className="rounded-full border border-brand-dark/15 px-3 py-1.5 text-sm font-semibold text-brand-dark transition-colors hover:bg-brand-light"
+          className="rounded-full border border-line px-3.5 py-1.5 text-sm font-semibold text-ink transition-colors hover:bg-panel"
         >
           {t.toggle}
         </button>

@@ -80,7 +80,18 @@ async function resolveDestination(
   return { dest_id: best.dest_id, search_type: best.search_type };
 }
 
-/** Build a Booking.com search URL carrying the affiliate id (Phase 11). */
+// Travelpayouts redirector + Booking.com program id. Clicks must go through
+// tp.media with your marker to attribute commission (a bare Booking.com `aid`
+// param tracks Booking's own legacy program, not Travelpayouts).
+const TP_REDIRECT = "https://tp.media/r";
+const TP_BOOKING_PROGRAM_ID = "4063"; // Booking.com program on Travelpayouts
+
+/**
+ * Build the "احجز الآن" link (blueprint Phase 11).
+ * If a Travelpayouts marker is set (NEXT_PUBLIC_BOOKING_AFFILIATE_ID), wrap the
+ * Booking.com search URL in a tp.media redirect so the click is attributed to
+ * you. Otherwise fall back to a plain (untracked) Booking.com link.
+ */
 function buildBookingUrl(p: {
   name: string;
   countryCode?: string;
@@ -89,8 +100,9 @@ function buildBookingUrl(p: {
   adults: number;
   children: number;
 }): string {
-  const aid = process.env.NEXT_PUBLIC_BOOKING_AFFILIATE_ID ?? "";
-  const params = new URLSearchParams({
+  const marker = process.env.NEXT_PUBLIC_BOOKING_AFFILIATE_ID ?? "";
+
+  const bookingParams = new URLSearchParams({
     ss: p.name,
     checkin: p.checkin,
     checkout: p.checkout,
@@ -98,8 +110,16 @@ function buildBookingUrl(p: {
     group_children: String(p.children),
     no_rooms: "1",
   });
-  if (aid) params.set("aid", aid);
-  return `https://www.booking.com/searchresults.html?${params.toString()}`;
+  const bookingUrl = `https://www.booking.com/searchresults.html?${bookingParams.toString()}`;
+
+  if (!marker) return bookingUrl;
+
+  const tp = new URLSearchParams({
+    marker,
+    p: TP_BOOKING_PROGRAM_ID,
+    u: bookingUrl,
+  });
+  return `${TP_REDIRECT}?${tp.toString()}`;
 }
 
 // booking-com15's free search response carries no facilities list (only name,

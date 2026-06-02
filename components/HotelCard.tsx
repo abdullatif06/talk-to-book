@@ -1,6 +1,6 @@
 // TalkToBook — hotel result card (blueprint Phase 5 & 9, Screen 2 wireframe).
-// Photo · Arabic name · stars + guest score · price/night · halal & family
-// badges · 3-sentence Arabic AI summary · "احجز الآن" affiliate button.
+// Photo · Arabic name · gold stars + guest score · green price/night · halal &
+// family badges · 3-sentence Arabic AI summary · "احجز الآن" affiliate button.
 //
 // The Arabic summary is fetched lazily from /api/summarize when the card mounts
 // (one Gemini request per card), rather than eagerly in the chat route — this
@@ -14,15 +14,14 @@ import type { Hotel, ReviewSummary } from "@/types";
 function Stars({ count }: { count: number }) {
   const n = Math.max(0, Math.min(5, count));
   return (
-    <span className="text-amber-500" aria-label={`${n} نجوم`}>
+    <span className="text-gold" aria-label={`${n} نجوم`}>
       {"★".repeat(n)}
-      <span className="text-brand-dark/20">{"★".repeat(5 - n)}</span>
+      <span className="text-line">{"★".repeat(5 - n)}</span>
     </span>
   );
 }
 
 export default function HotelCard({ hotel }: { hotel: Hotel }) {
-  // Use a summary that came with the hotel if present; otherwise fetch lazily.
   const [summary, setSummary] = useState<ReviewSummary | undefined>(
     hotel.arabic_summary,
   );
@@ -58,85 +57,98 @@ export default function HotelCard({ hotel }: { hotel: Hotel }) {
   }, [hotel]);
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-brand-dark/10 bg-white shadow-sm">
+    <article className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card transition-all hover:-translate-y-1 hover:shadow-card-hover">
       {/* Photo */}
-      <div className="relative h-44 w-full bg-brand-light">
+      <div className="relative h-44 w-full overflow-hidden bg-panel">
         {hotel.image_url ? (
           <Image
             src={hotel.image_url}
             alt={hotel.name_ar || hotel.name}
             fill
-            sizes="(max-width: 640px) 100vw, 640px"
-            className="object-cover"
+            sizes="(max-width: 640px) 100vw, 384px"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-brand-dark/30">
+          <div className="flex h-full items-center justify-center text-ink-soft/40">
             لا توجد صورة
           </div>
         )}
+
+        {/* guest score chip, floating on the photo */}
+        {hotel.rating > 0 && (
+          <span className="absolute bottom-2 end-2 rounded-lg bg-primary px-2 py-1 text-sm font-bold text-white shadow-md">
+            {hotel.rating.toFixed(1)}
+          </span>
+        )}
       </div>
 
-      <div className="flex flex-col gap-3 p-4">
-        {/* Name + rating row */}
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="text-lg font-bold text-brand-dark">
+      <div className="flex flex-1 flex-col gap-3 p-4">
+        {/* Name + stars */}
+        <div className="flex flex-col gap-1">
+          <h3 className="text-lg font-bold leading-snug text-ink">
             {hotel.name_ar || hotel.name}
           </h3>
-          {hotel.rating > 0 && (
-            <span className="shrink-0 rounded-lg bg-brand-teal px-2 py-1 text-sm font-bold text-white">
-              {hotel.rating.toFixed(1)}/10
-            </span>
+          {hotel.stars > 0 && (
+            <div className="text-sm">
+              <Stars count={hotel.stars} />
+            </div>
           )}
-        </div>
-
-        {hotel.stars > 0 && (
-          <div className="text-sm">
-            <Stars count={hotel.stars} />
-          </div>
-        )}
-
-        {/* Price */}
-        <div className="text-base font-semibold text-brand-dark">
-          💰{" "}
-          {hotel.price_per_night > 0
-            ? `${hotel.price_per_night}$ / ليلة`
-            : "السعر عند الطلب"}
         </div>
 
         {/* Badges */}
-        <div className="flex flex-wrap gap-2 text-sm">
-          {hotel.halal_amenities.length > 0 && (
-            <span className="rounded-full bg-brand-light px-3 py-1 text-brand-teal">
-              ✅ ملائم للمسلمين
-            </span>
-          )}
-          {hotel.family_features.length > 0 && (
-            <span className="rounded-full bg-brand-light px-3 py-1 text-brand-teal">
-              👨‍👩‍👧‍👦 مناسب للعائلة
-            </span>
-          )}
-        </div>
+        {(hotel.halal_amenities.length > 0 || hotel.family_features.length > 0) && (
+          <div className="flex flex-wrap gap-2 text-xs">
+            {hotel.halal_amenities.length > 0 && (
+              <span className="rounded-full bg-price/10 px-2.5 py-1 font-medium text-price">
+                ✅ ملائم للمسلمين
+              </span>
+            )}
+            {hotel.family_features.length > 0 && (
+              <span className="rounded-full bg-gold/15 px-2.5 py-1 font-medium text-[#9a6d12]">
+                👨‍👩‍👧‍👦 مناسب للعائلة
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Arabic AI review summary */}
         {loadingSummary ? (
-          <p className="text-sm text-brand-dark/40">جاري تلخيص التقييمات...</p>
+          <p className="flex items-center gap-2 text-sm text-ink-soft/60">
+            <span className="typing-dot h-1.5 w-1.5 rounded-full bg-primary" />
+            جاري تلخيص التقييمات...
+          </p>
         ) : (
           summary?.summary_ar && (
-            <p className="border-r-2 border-brand-teal/40 pr-3 text-sm leading-relaxed text-brand-dark/80">
+            <p className="border-e-2 border-gold/50 pe-3 text-sm leading-relaxed text-ink-soft">
               {summary.summary_ar}
             </p>
           )
         )}
 
-        {/* Book CTA → Booking.com affiliate link */}
-        <a
-          href={hotel.booking_url_base}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-1 inline-flex items-center justify-center rounded-full bg-brand-teal px-5 py-2.5 font-semibold text-white transition-colors hover:bg-brand-dark"
-        >
-          احجز الآن ←
-        </a>
+        {/* Price + Book CTA pinned to the bottom */}
+        <div className="mt-auto flex items-center justify-between gap-3 pt-2">
+          <div className="leading-tight">
+            {hotel.price_per_night > 0 ? (
+              <>
+                <span className="text-xl font-extrabold text-price">
+                  {hotel.price_per_night}$
+                </span>
+                <span className="text-xs text-ink-soft"> / ليلة</span>
+              </>
+            ) : (
+              <span className="text-sm text-ink-soft">السعر عند الطلب</span>
+            )}
+          </div>
+
+          <a
+            href={hotel.booking_url_base}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-dark"
+          >
+            احجز الآن ←
+          </a>
+        </div>
       </div>
     </article>
   );

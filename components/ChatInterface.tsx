@@ -210,7 +210,7 @@ export default function ChatInterface() {
   return (
     <div
       dir={lang === "ar" ? "rtl" : "ltr"}
-      className="flex h-[100dvh] flex-1 flex-col bg-brand-light/30"
+      className="flex h-[100dvh] flex-1 flex-col bg-panel pattern-arabesque"
     >
       <ChatTopBar
         lang={lang}
@@ -241,7 +241,8 @@ export default function ChatInterface() {
                   key={i}
                   type="button"
                   onClick={() => sendMessage(ex)}
-                  className="self-end rounded-2xl border border-brand-teal/30 bg-white px-4 py-2 text-start text-sm text-brand-dark transition-colors hover:bg-brand-light"
+                  className="animate-fade-up self-end rounded-2xl border border-primary/25 bg-white px-4 py-2.5 text-start text-sm text-ink shadow-sm transition-all hover:border-primary hover:bg-primary/5"
+                  style={{ animationDelay: `${i * 80}ms` }}
                 >
                   {ex}
                 </button>
@@ -254,14 +255,14 @@ export default function ChatInterface() {
       </div>
 
       {/* Trip summary + search trigger + input */}
-      <div className="border-t border-brand-dark/10 bg-white">
+      <div className="border-t border-line bg-white/95 backdrop-blur-md">
         <div className="mx-auto max-w-2xl px-4 pt-3">
           <SearchParams params={params} lang={lang} />
           {showSearchButton && (
             <button
               type="button"
               onClick={runSearch}
-              className="mb-2 w-full rounded-full bg-brand-teal py-3 text-center font-semibold text-white shadow-sm transition-colors hover:bg-brand-dark"
+              className="mb-2 w-full rounded-full bg-gold py-3.5 text-center text-base font-bold text-white shadow-card transition-all hover:brightness-95"
             >
               {SEARCH_NOW[lang]}
             </button>

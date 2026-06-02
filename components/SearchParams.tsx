@@ -32,7 +32,7 @@ const T = {
 
 function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-full bg-white px-3 py-1 text-xs font-medium text-brand-dark shadow-sm ring-1 ring-brand-teal/15">
+    <span className="rounded-full bg-white px-3 py-1 text-xs font-medium text-ink shadow-sm ring-1 ring-line">
       {children}
     </span>
   );
@@ -68,7 +68,7 @@ export default function SearchParams({
 
   return (
     <div className="flex flex-wrap items-center gap-2 px-1 pb-2">
-      <span className="text-xs text-brand-dark/50">{t.title}:</span>
+      <span className="text-xs text-ink-soft">{t.title}:</span>
       {dest && <Chip>📍 {dest}</Chip>}
       {params.checkin && (
         <Chip>

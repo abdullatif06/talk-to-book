@@ -1,31 +1,82 @@
 @import "tailwindcss";
 
 /*
-  TalkToBook — Tailwind v4 theme.
-  The blueprint (Phase 10, Step 2) is written for Tailwind v3's tailwind.config.ts.
-  Tailwind v4 moves theme tokens into CSS via @theme, so the same design intent
-  (Cairo Arabic font + brand teal palette) is expressed here instead.
+  TalkToBook — design system (Tailwind v4 @theme).
+  Direction: clean, trustworthy booking platform (Booking.com-style blue) with
+  warm Arabian character (gold accent, Rakkas display headings, subtle geometric
+  texture). Body/UI = Cairo; headings = Rakkas.
 */
 
 @theme {
-  /* Arabic-first font stack. --font-cairo is injected by next/font in layout.tsx */
+  /* Fonts (CSS variables injected by next/font in layout.tsx) */
   --font-arabic: var(--font-cairo), "Noto Sans Arabic", sans-serif;
+  --font-display: var(--font-rakkas), var(--font-cairo), serif;
 
-  /* Brand palette from the blueprint (Phase 10, Step 2) */
-  --color-brand-teal: #0d9488;
-  --color-brand-light: #f0fdfa;
-  --color-brand-dark: #0f3d38;
+  /* --- Booking-platform palette --- */
+  --color-ink: #1a2b49; /* primary text (navy ink) */
+  --color-ink-soft: #5b6b86; /* secondary text */
+  --color-primary: #0a6ce0; /* booking blue — CTAs, links */
+  --color-primary-dark: #075bc0; /* hover */
+  --color-gold: #e8a33d; /* warm Arabian accent, star ratings */
+  --color-price: #1f8a50; /* prices */
+  --color-sand: #f7f4ee; /* warm panel tint */
+  --color-panel: #f5f7fa; /* cool panel tint */
+  --color-line: #e6eaf0; /* hairline borders */
+
+  /* Backwards-compatible brand aliases (older components reference these) */
+  --color-brand-teal: #0a6ce0;
+  --color-brand-light: #eef4fd;
+  --color-brand-dark: #1a2b49;
 }
 
 :root {
   --background: #ffffff;
-  --foreground: #0f3d38;
+  --foreground: #1a2b49;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-arabic);
+}
+
+/* Display headings use Rakkas */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0;
+}
+
+/*
+  Subtle Islamic-geometric texture — a faint repeating diamond/star lattice.
+  Pure CSS (layered conic/linear gradients), very low opacity for atmosphere.
+*/
+.pattern-arabesque {
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(10, 108, 224, 0.05) 1.5px, transparent 1.6px),
+    radial-gradient(circle at 0% 0%, rgba(232, 163, 61, 0.05) 1.5px, transparent 1.6px),
+    radial-gradient(circle at 100% 100%, rgba(232, 163, 61, 0.05) 1.5px, transparent 1.6px);
+  background-size: 28px 28px;
+  background-position: 0 0, 0 0, 0 0;
+}
+
+/* Warm/cool hero wash */
+.hero-wash {
+  background:
+    radial-gradient(900px 480px at 85% -10%, rgba(232, 163, 61, 0.14), transparent 60%),
+    radial-gradient(900px 520px at 5% 0%, rgba(10, 108, 224, 0.1), transparent 55%),
+    linear-gradient(180deg, #ffffff 0%, var(--color-sand) 100%);
+}
+
+/* Soft elevated card shadow */
+.shadow-card {
+  box-shadow:
+    0 1px 2px rgba(26, 43, 73, 0.04),
+    0 8px 24px rgba(26, 43, 73, 0.08);
+}
+.shadow-card-hover {
+  box-shadow:
+    0 2px 4px rgba(26, 43, 73, 0.06),
+    0 16px 40px rgba(26, 43, 73, 0.14);
 }
 
 /* Typing indicator dots (components/TypingIndicator.tsx) */
@@ -44,4 +95,19 @@ body {
 
 .typing-dot {
   animation: typing-bounce 1.2s ease-in-out infinite;
+}
+
+/* Staggered fade-up for page-load reveals */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-up {
+  animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }

@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
-import { Cairo } from "next/font/google";
+import { Cairo, Rakkas } from "next/font/google";
 import "./globals.css";
 
-// Cairo — the project's Arabic-first font (blueprint Phase 10, Step 3).
-// Exposed as a CSS variable so the Tailwind @theme font stack can reference it.
+// Cairo — body/UI font (Arabic-first, highly readable).
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
   variable: "--font-cairo",
+  display: "swap",
+});
+
+// Rakkas — decorative Arabic display font for headings (gives the boutique
+// Arab-brand character). Single weight (400) per the font's design.
+const rakkas = Rakkas({
+  subsets: ["arabic", "latin"],
+  weight: "400",
+  variable: "--font-rakkas",
   display: "swap",
 });
 
@@ -49,7 +57,7 @@ export default function RootLayout({
     <html
       lang="ar"
       dir="rtl"
-      className={`${cairo.variable} h-full`}
+      className={`${cairo.variable} ${rakkas.variable} h-full`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col antialiased font-arabic">

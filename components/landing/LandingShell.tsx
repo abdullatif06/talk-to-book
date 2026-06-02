@@ -14,9 +14,14 @@ export default function LandingShell() {
   const { copy } = useLanding();
 
   return (
-    <div dir={copy.dir} className="flex flex-1 flex-col bg-brand-light/30">
-      <LandingHeader />
-      <Hero />
+    <div dir={copy.dir} className="flex flex-1 flex-col">
+      {/* Top: warm wash + subtle pattern behind header & hero */}
+      <div className="hero-wash">
+        <div className="pattern-arabesque">
+          <LandingHeader />
+          <Hero />
+        </div>
+      </div>
       <HowItWorks />
       <TrustSection />
       <SampleConversation />
