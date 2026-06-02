@@ -1,9 +1,7 @@
 // TalkToBook — main chat UI (blueprint Phase 9, Screen 2).
-// Day 5: end-to-end — sends to /api/chat, renders the reply, and shows the 3
-// result cards inline. Cards appear when /api/chat auto-triggers a search
-// (ready_to_search), and also via an "ابحث الآن" button once enough params are
-// gathered — a reliable fallback for weaker free models that hesitate to set
-// ready_to_search themselves. The button calls the Phase 7 /api/search endpoint.
+// Day 7 polish: shows gathered trip params, example-prompt chips on first load,
+// a prominent "ابحث الآن" trigger, and clearer loading / no-results states —
+// so the experience holds up even on the weaker free Gemini model.
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -12,6 +10,7 @@ import ChatInput from "./ChatInput";
 import MessageBubble from "./MessageBubble";
 import TypingIndicator from "./TypingIndicator";
 import HotelCard from "./HotelCard";
+import SearchParams from "./SearchParams";
 import type {
   ChatMessage,
   ChatResponse,
@@ -20,7 +19,6 @@ import type {
   TravelParams,
 } from "@/types";
 
-// A chat turn as held in UI state — may carry hotel result cards.
 interface UiMessage extends ChatMessage {
   hotels?: Hotel[];
 }
@@ -35,13 +33,31 @@ const NO_RESULTS: Record<Lang, string> = {
   en: "I couldn't find matching hotels within your budget. Want me to widen the search or raise the budget a bit?",
 };
 
+const RESULTS_INTRO: Record<Lang, string> = {
+  ar: "تفضّل، هذه أفضل ٣ خيارات لرحلتك:",
+  en: "Here are the top 3 options for your trip:",
+};
+
 const SEARCH_NOW: Record<Lang, string> = { ar: "ابحث الآن 🔍", en: "Search now 🔍" };
+
+// Tappable starter prompts (tuned to extract cleanly on the free model).
+const EXAMPLES: Record<Lang, string[]> = {
+  ar: [
+    "فندق في دبي من 2026-07-10 إلى 2026-07-12، شخصان، ميزانية 150 دولار",
+    "فندق حلال في عمّان من 2026-08-01 إلى 2026-08-05، شخصان وطفلان",
+    "فندق في إسطنبول من 2026-09-03 إلى 2026-09-07، شخصان، قريب من السوق",
+  ],
+  en: [
+    "Hotel in Dubai from 2026-07-10 to 2026-07-12, 2 adults, budget $150",
+    "Halal hotel in Amman from 2026-08-01 to 2026-08-05, 2 adults 2 children",
+    "Hotel in Istanbul from 2026-09-03 to 2026-09-07, 2 adults, near the souk",
+  ],
+};
 
 function welcomeMessage(lang: Lang): UiMessage {
   return { role: "model", content: WELCOME[lang] };
 }
 
-/** Enough info to search? Need destination + both dates. */
 function canSearch(p: Partial<TravelParams>): boolean {
   return Boolean(p.destination && p.checkin && p.checkout);
 }
@@ -50,7 +66,6 @@ export default function ChatInterface() {
   const [lang, setLang] = useState<Lang>("ar");
   const [messages, setMessages] = useState<UiMessage[]>([welcomeMessage("ar")]);
   const [isTyping, setIsTyping] = useState(false);
-  // Params accumulate across turns (each /api/chat reply may fill in more).
   const [params, setParams] = useState<Partial<TravelParams>>({});
   const [resultsShown, setResultsShown] = useState(false);
 
@@ -63,7 +78,6 @@ export default function ChatInterface() {
     });
   }, [messages, isTyping]);
 
-  /** Merge newly-extracted params over what we already have (non-null wins). */
   function mergeParams(next?: Partial<TravelParams>) {
     if (!next) return;
     setParams((prev) => {
@@ -128,7 +142,6 @@ export default function ChatInterface() {
     [messages, lang],
   );
 
-  /** Explicit search trigger — calls /api/search with the gathered params. */
   const runSearch = useCallback(async () => {
     if (!canSearch(params) || isTyping) return;
     setIsTyping(true);
@@ -152,11 +165,7 @@ export default function ChatInterface() {
         ...prev,
         {
           role: "model",
-          content: hotels.length
-            ? lang === "ar"
-              ? "تفضّل، هذه أفضل 3 خيارات لرحلتك:"
-              : "Here are the top 3 options for your trip:"
-            : NO_RESULTS[lang],
+          content: hotels.length ? RESULTS_INTRO[lang] : NO_RESULTS[lang],
           hotels: hotels.length ? hotels : undefined,
         },
       ]);
@@ -176,24 +185,26 @@ export default function ChatInterface() {
     }
   }, [params, isTyping, lang]);
 
-  function handleNewTrip() {
-    setMessages([welcomeMessage(lang)]);
+  function resetState(next: Lang) {
+    setMessages([welcomeMessage(next)]);
     setParams({});
     setResultsShown(false);
     setIsTyping(false);
   }
 
+  function handleNewTrip() {
+    resetState(lang);
+  }
+
   function handleToggleLang() {
     setLang((prev) => {
       const next: Lang = prev === "ar" ? "en" : "ar";
-      setMessages([welcomeMessage(next)]);
-      setParams({});
-      setResultsShown(false);
-      setIsTyping(false);
+      resetState(next);
       return next;
     });
   }
 
+  const showExamples = messages.length === 1 && !isTyping;
   const showSearchButton = canSearch(params) && !resultsShown && !isTyping;
 
   return (
@@ -221,23 +232,43 @@ export default function ChatInterface() {
               )}
             </div>
           ))}
-          {isTyping && <TypingIndicator />}
 
-          {showSearchButton && (
-            <div className="flex justify-center pt-2">
-              <button
-                type="button"
-                onClick={runSearch}
-                className="rounded-full bg-brand-teal px-6 py-2.5 font-semibold text-white shadow-sm transition-colors hover:bg-brand-dark"
-              >
-                {SEARCH_NOW[lang]}
-              </button>
+          {/* Example-prompt chips on first load */}
+          {showExamples && (
+            <div className="flex flex-col gap-2">
+              {EXAMPLES[lang].map((ex, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => sendMessage(ex)}
+                  className="self-end rounded-2xl border border-brand-teal/30 bg-white px-4 py-2 text-start text-sm text-brand-dark transition-colors hover:bg-brand-light"
+                >
+                  {ex}
+                </button>
+              ))}
             </div>
           )}
+
+          {isTyping && <TypingIndicator />}
         </div>
       </div>
 
-      <ChatInput lang={lang} disabled={isTyping} onSend={sendMessage} />
+      {/* Trip summary + search trigger + input */}
+      <div className="border-t border-brand-dark/10 bg-white">
+        <div className="mx-auto max-w-2xl px-4 pt-3">
+          <SearchParams params={params} lang={lang} />
+          {showSearchButton && (
+            <button
+              type="button"
+              onClick={runSearch}
+              className="mb-2 w-full rounded-full bg-brand-teal py-3 text-center font-semibold text-white shadow-sm transition-colors hover:bg-brand-dark"
+            >
+              {SEARCH_NOW[lang]}
+            </button>
+          )}
+        </div>
+        <ChatInput lang={lang} disabled={isTyping} onSend={sendMessage} />
+      </div>
     </div>
   );
 }

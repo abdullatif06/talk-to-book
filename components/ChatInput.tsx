@@ -37,7 +37,7 @@ export default function ChatInput({
   }
 
   return (
-    <div className="border-t border-brand-dark/10 bg-white px-4 py-3">
+    <div className="px-4 py-3">
       <div className="mx-auto flex max-w-2xl items-end gap-2">
         {/* Microphone — placeholder for a future voice feature */}
         <button
