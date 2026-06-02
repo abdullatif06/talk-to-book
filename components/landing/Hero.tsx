@@ -3,8 +3,9 @@
 // Right: an animated chat-typing demo. Warm booking-platform wash.
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { useLanding } from "@/lib/i18n";
 import { useTypewriter } from "./useTypewriter";
 
@@ -14,13 +15,25 @@ export default function Hero() {
   const typed = useTypewriter(copy.heroDemoUser);
   const [q, setQ] = useState("");
 
+  // Gentle parallax drift on the demo card as the hero scrolls past.
+  const reduced = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const demoY = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : -40]);
+
   function go() {
     const text = q.trim();
     router.push(text ? `/chat?q=${encodeURIComponent(text)}` : "/chat");
   }
 
   return (
-    <section className="mx-auto grid max-w-5xl items-center gap-10 px-6 py-14 md:grid-cols-2">
+    <section
+      ref={sectionRef}
+      className="mx-auto grid max-w-5xl items-center gap-10 px-6 py-14 md:grid-cols-2"
+    >
       {/* Text + interactive input */}
       <div className="flex flex-col gap-6 text-center md:text-start">
         <h1 className="font-display text-4xl leading-tight text-ink sm:text-5xl animate-fade-up">
@@ -49,8 +62,11 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Animated chat demo */}
-      <div className="animate-fade-up rounded-3xl border border-line bg-white p-5 shadow-card [animation-delay:280ms]">
+      {/* Animated chat demo (gentle parallax drift) */}
+      <motion.div
+        style={{ y: demoY }}
+        className="animate-fade-up rounded-3xl border border-line bg-white p-5 shadow-card [animation-delay:280ms]"
+      >
         <div className="mb-4 flex items-center gap-1.5">
           <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
@@ -69,7 +85,7 @@ export default function Hero() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

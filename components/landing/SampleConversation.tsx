@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from "react";
 import { useLanding } from "@/lib/i18n";
+import { Reveal } from "@/components/motion/Reveal";
 
 export default function SampleConversation() {
   const { copy } = useLanding();
@@ -21,7 +22,7 @@ export default function SampleConversation() {
 
   return (
     <section className="bg-white py-20">
-      <div className="mx-auto max-w-2xl px-6">
+      <Reveal className="mx-auto max-w-2xl px-6">
         <h2 className="mb-10 text-center font-display text-3xl text-ink">
           {copy.sampleTitle}
         </h2>
@@ -49,7 +50,7 @@ export default function SampleConversation() {
             );
           })}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

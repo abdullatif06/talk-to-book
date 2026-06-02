@@ -1,24 +1,27 @@
-// Maps an i18n IconKey to its SVG component (components/landing/Icons.tsx).
+// Maps an i18n IconKey to a Lucide icon. Lucide is the standard, consistent
+// icon set used across the app. These icons are non-directional, so they need
+// no RTL mirroring (only arrows/chevrons do — handled where used).
 import {
-  ChatIcon,
-  SparklesIcon,
-  HotelIcon,
-  ShieldIcon,
-  GlobeIcon,
-  TagIcon,
-} from "./Icons";
+  MessageSquareText,
+  Sparkles,
+  Hotel,
+  ShieldCheck,
+  Globe,
+  Tag,
+  type LucideIcon,
+} from "lucide-react";
 import type { IconKey } from "@/lib/i18n";
 
-const MAP = {
-  chat: ChatIcon,
-  sparkles: SparklesIcon,
-  hotel: HotelIcon,
-  shield: ShieldIcon,
-  globe: GlobeIcon,
-  tag: TagIcon,
-} as const;
+const MAP: Record<IconKey, LucideIcon> = {
+  chat: MessageSquareText,
+  sparkles: Sparkles,
+  hotel: Hotel,
+  shield: ShieldCheck,
+  globe: Globe,
+  tag: Tag,
+};
 
 export function Icon({ name, className }: { name: IconKey; className?: string }) {
   const Cmp = MAP[name];
-  return <Cmp className={className} />;
+  return <Cmp className={className} strokeWidth={1.8} aria-hidden />;
 }

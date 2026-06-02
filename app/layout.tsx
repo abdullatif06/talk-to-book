@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Cairo, Rakkas } from "next/font/google";
+import "lenis/dist/lenis.css";
 import "./globals.css";
+import SmoothScroll from "@/components/SmoothScroll";
 
 // Cairo — body/UI font (Arabic-first, highly readable).
 const cairo = Cairo({
@@ -61,7 +63,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col antialiased font-arabic">
-        {children}
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );

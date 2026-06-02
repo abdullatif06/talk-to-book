@@ -3,16 +3,17 @@
 "use client";
 
 import { useLanding } from "@/lib/i18n";
-import { CheckIcon, CrossIcon } from "./Icons";
+import { Check, X } from "lucide-react";
+import { Reveal } from "@/components/motion/Reveal";
 
 function Cell({ on }: { on: boolean }) {
   return on ? (
     <span className="mx-auto flex h-6 w-6 items-center justify-center rounded-full bg-price/12 text-price">
-      <CheckIcon className="h-4 w-4" />
+      <Check className="h-4 w-4" strokeWidth={2.5} />
     </span>
   ) : (
     <span className="mx-auto flex h-6 w-6 items-center justify-center rounded-full bg-ink/5 text-ink-soft/50">
-      <CrossIcon className="h-4 w-4" />
+      <X className="h-4 w-4" strokeWidth={2.5} />
     </span>
   );
 }
@@ -22,7 +23,7 @@ export default function Comparison() {
 
   return (
     <section className="bg-white py-20">
-      <div className="mx-auto max-w-3xl px-6">
+      <Reveal className="mx-auto max-w-3xl px-6">
         <h2 className="mb-10 text-center font-display text-3xl text-ink">
           {copy.compareTitle}
         </h2>
@@ -63,7 +64,7 @@ export default function Comparison() {
             </tbody>
           </table>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

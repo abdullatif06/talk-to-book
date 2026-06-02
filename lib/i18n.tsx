@@ -6,7 +6,7 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import type { Lang } from "@/types";
 
-// Icon keys map to the SVG set in components/landing/Icons.tsx.
+// Icon keys map to Lucide icons in components/landing/iconMap.tsx.
 export type IconKey =
   | "chat"
   | "sparkles"

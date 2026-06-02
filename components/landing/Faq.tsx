@@ -3,7 +3,8 @@
 
 import { useState } from "react";
 import { useLanding } from "@/lib/i18n";
-import { ChevronIcon } from "./Icons";
+import { ChevronDown } from "lucide-react";
+import { Reveal } from "@/components/motion/Reveal";
 
 export default function Faq() {
   const { copy } = useLanding();
@@ -11,7 +12,7 @@ export default function Faq() {
 
   return (
     <section id="faq" className="scroll-mt-20 bg-sand py-20">
-      <div className="mx-auto max-w-2xl px-6">
+      <Reveal className="mx-auto max-w-2xl px-6">
         <h2 className="mb-10 text-center font-display text-3xl text-ink">
           {copy.faqTitle}
         </h2>
@@ -31,7 +32,7 @@ export default function Faq() {
                   aria-expanded={isOpen}
                 >
                   <span className="font-bold text-ink">{item.q}</span>
-                  <ChevronIcon
+                  <ChevronDown
                     className={`h-5 w-5 shrink-0 text-primary transition-transform ${
                       isOpen ? "rotate-180" : ""
                     }`}
@@ -52,7 +53,7 @@ export default function Faq() {
             );
           })}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
