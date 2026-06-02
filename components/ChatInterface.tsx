@@ -142,6 +142,18 @@ export default function ChatInterface() {
     [messages, lang],
   );
 
+  // Auto-send a query passed from the landing page (/chat?q=...) exactly once.
+  const autoSent = useRef(false);
+  useEffect(() => {
+    if (autoSent.current) return;
+    const q = new URLSearchParams(window.location.search).get("q");
+    if (q?.trim()) {
+      autoSent.current = true;
+      sendMessage(q.trim());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const runSearch = useCallback(async () => {
     if (!canSearch(params) || isTyping) return;
     setIsTyping(true);

@@ -4,25 +4,38 @@
 
 import Link from "next/link";
 import { useLanding } from "@/lib/i18n";
+import { Logo } from "./Logo";
 
 export default function LandingHeader() {
-  const { copy } = useLanding();
+  const { copy, toggle } = useLanding();
 
   return (
-    <header className="flex flex-col items-center gap-5 px-6 pt-16 text-center">
-      <div className="flex items-center gap-2 animate-fade-up">
-        <span className="text-3xl">🏨</span>
-        <span className="font-display text-3xl text-primary">{copy.brand}</span>
-      </div>
-      <p className="max-w-xl text-lg text-ink-soft animate-fade-up [animation-delay:80ms]">
-        {copy.tagline}
-      </p>
-      <Link
-        href="/chat"
-        className="animate-fade-up rounded-full bg-primary px-9 py-3.5 text-lg font-bold text-white shadow-card transition-all hover:bg-primary-dark hover:shadow-card-hover [animation-delay:160ms]"
-      >
-        {copy.ctaStart}
-      </Link>
-    </header>
+    <>
+      {/* sticky top nav */}
+      <nav className="sticky top-0 z-20 flex items-center justify-between border-b border-line/70 bg-white/80 px-6 py-3 backdrop-blur-md">
+        <Logo />
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggle}
+            aria-label="Toggle language"
+            className="rounded-full border border-line px-3.5 py-1.5 text-sm font-semibold text-ink transition-colors hover:bg-panel"
+          >
+            {copy.toggleLabel}
+          </button>
+          <Link
+            href="/chat"
+            className="rounded-full bg-primary px-5 py-1.5 text-sm font-bold text-white transition-colors hover:bg-primary-dark"
+          >
+            {copy.ctaStart}
+          </Link>
+        </div>
+      </nav>
+
+      {/* hero intro */}
+      <header className="flex flex-col items-center gap-5 px-6 pt-14 text-center">
+        <p className="max-w-xl text-lg text-ink-soft animate-fade-up">{copy.tagline}</p>
+      </header>
+    </>
   );
 }

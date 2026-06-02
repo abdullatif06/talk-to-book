@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "**.bstatic.com" },
       { protocol: "https", hostname: "**.booking.com" },
+      // Destination photos on the landing page (free-license, commercial-OK).
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "images.pexels.com" },
     ],
   },
 };
