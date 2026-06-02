@@ -12,26 +12,30 @@
   --font-arabic: var(--font-cairo), "Noto Sans Arabic", sans-serif;
   --font-display: var(--font-rakkas), var(--font-cairo), serif;
 
-  /* --- Booking-platform palette --- */
-  --color-ink: #1a2b49; /* primary text (navy ink) */
-  --color-ink-soft: #5b6b86; /* secondary text */
-  --color-primary: #0a6ce0; /* booking blue — CTAs, links */
-  --color-primary-dark: #075bc0; /* hover */
-  --color-gold: #e8a33d; /* warm Arabian accent, star ratings */
-  --color-price: #1f8a50; /* prices */
-  --color-sand: #f7f4ee; /* warm panel tint */
-  --color-panel: #f5f7fa; /* cool panel tint */
-  --color-line: #e6eaf0; /* hairline borders */
+  /* --- Jadoo-style warm travel palette --- */
+  --color-ink: #181e4b; /* deep navy headings/text */
+  --color-ink-soft: #5e6282; /* muted body text */
+  --color-primary: #f1683a; /* coral — CTAs, accents */
+  --color-primary-dark: #df5326; /* hover */
+  --color-gold: #f1a501; /* warm yellow secondary accent */
+  --color-price: #1f8a50; /* prices stay green (trust) */
+  --color-sand: #fff8f3; /* warm cream panel */
+  --color-panel: #f7f7fb; /* cool light panel */
+  --color-line: #ededf0; /* hairline borders */
 
-  /* Dark canvas (AI/tech hero + bento section) */
-  --color-night: #0a1226; /* deep navy-black hero bg */
-  --color-night-soft: #111c38; /* raised dark panel */
-  --color-night-line: #24314f; /* dark hairline */
+  /* Soft pastel hero blob tints */
+  --color-blob-warm: #fde8d8; /* peach */
+  --color-blob-cool: #e9f0ff; /* pale blue */
+
+  /* Dark navy (footer / accents) */
+  --color-night: #181e4b;
+  --color-night-soft: #212759;
+  --color-night-line: #2e356e;
 
   /* Backwards-compatible brand aliases (older components reference these) */
-  --color-brand-teal: #0a6ce0;
-  --color-brand-light: #eef4fd;
-  --color-brand-dark: #1a2b49;
+  --color-brand-teal: #f1683a;
+  --color-brand-light: #fff1ea;
+  --color-brand-dark: #181e4b;
 }
 
 :root {
@@ -64,12 +68,18 @@ body {
   background-position: 0 0, 0 0, 0 0;
 }
 
-/* Warm/cool hero wash */
+/* Warm light hero wash (Jadoo-style) */
 .hero-wash {
   background:
-    radial-gradient(900px 480px at 85% -10%, rgba(232, 163, 61, 0.14), transparent 60%),
-    radial-gradient(900px 520px at 5% 0%, rgba(10, 108, 224, 0.1), transparent 55%),
-    linear-gradient(180deg, #ffffff 0%, var(--color-sand) 100%);
+    radial-gradient(700px 480px at 88% 0%, rgba(241, 165, 1, 0.12), transparent 60%),
+    radial-gradient(600px 520px at 4% 10%, rgba(241, 104, 58, 0.08), transparent 55%),
+    #ffffff;
+}
+
+/* Soft pastel blob behind the hero photo */
+.hero-blob {
+  background: radial-gradient(closest-side, var(--color-blob-warm), transparent);
+  filter: blur(4px);
 }
 
 /* Soft elevated card shadow */

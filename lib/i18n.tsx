@@ -41,11 +41,28 @@ export interface LandingCopy {
   ctaStart: string;
   ctaTry: string;
   // Hero
+  heroEyebrow: string;
   heroTitle: string;
   heroSubtitle: string;
+  heroImage: string;
   heroPlaceholder: string;
   heroDemoUser: string;
   heroDemoAI: string;
+  // Section eyebrows (small label above titles, Jadoo-style)
+  servicesEyebrow: string;
+  destEyebrow: string;
+  stepsEyebrow: string;
+  stepsTitle: string;
+  // Testimonials
+  testimonialsEyebrow: string;
+  testimonialsTitle: string;
+  testimonials: { quote: string; name: string; role: string }[];
+  // Partner logos (text wordmarks)
+  logos: string[];
+  // Newsletter
+  newsletterTitle: string;
+  newsletterCta: string;
+  newsletterPlaceholder: string;
   // Stats band
   stats: { value: string; label: string }[];
   // Popular destinations
@@ -88,6 +105,8 @@ const PHOTO = {
   amman: "https://images.unsplash.com/photo-1562790351-d273a961e0e9?w=800&q=80&auto=format&fit=crop",
   cairo: "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800&q=80&auto=format&fit=crop",
   riyadh: "https://images.unsplash.com/photo-1586724237569-f3d0c1dee8c6?w=800&q=80&auto=format&fit=crop",
+  // Hero: a happy traveler — warm, friendly, Jadoo-style
+  hero: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=900&q=80&auto=format&fit=crop",
 };
 
 const AR: LandingCopy = {
@@ -96,13 +115,37 @@ const AR: LandingCopy = {
   tagline: "احجز فندقك بالعربي — كلّمنا مثل ما تكلّم صاحبك",
   ctaStart: "ابدأ الآن",
   ctaTry: "جرّب الآن",
-  heroTitle: "صف رحلتك بالعربي، ونلاقي لك أفضل ٣ فنادق",
+  heroEyebrow: "أفضل وجهات السفر حول العالم",
+  heroTitle: "سافر، استمتع،\nوعِش حياتك بالكامل",
   heroSubtitle:
-    "بدون قوائم فلترة معقّدة. اكتب اللي تبيه بكلامك العادي، والذكاء الاصطناعي يفهمك ويختار لك الأنسب — مع ملخص عربي صادق لتقييمات النزلاء.",
+    "صف رحلتك بالعربي، ودع الذكاء الاصطناعي يختار لك أفضل ٣ فنادق — مع ملخص صادق لتقييمات النزلاء. بدون قوائم فلترة، بدون تعقيد.",
+  heroImage: PHOTO.hero,
   heroPlaceholder: "مثال: فندق حلال بدبي لـ٣ ليالٍ، شخصين، ميزانية ١٥٠ دولار",
   heroDemoUser:
     "أبي فندق بدبي لأسبوع في يوليو، أنا وزوجتي وثلاثة أطفال، ميزانية ١٥٠ دولار، يكون حلال وقريب من السوق",
   heroDemoAI: "ممتاز! حاضر، خلّني ألاقي لك أنسب الخيارات العائلية الحلال في دبي…",
+  servicesEyebrow: "الفئة",
+  destEyebrow: "الأكثر طلباً",
+  stepsEyebrow: "بسهولة وسرعة",
+  stepsTitle: "احجز رحلتك القادمة\nبثلاث خطوات بسيطة",
+  testimonialsEyebrow: "آراء النزلاء",
+  testimonialsTitle: "ماذا يقول الناس عنّا",
+  testimonials: [
+    {
+      quote: "أسهل تجربة حجز جرّبتها. كتبت طلبي بالعربي وطلع لي ٣ فنادق مظبوطة على طول.",
+      name: "نور العتيبي",
+      role: "الرياض، السعودية",
+    },
+    {
+      quote: "حلو إنه يفهم لهجتي ويعطيني ملخص صادق للتقييمات. وفّر علي ساعات بحث.",
+      name: "خالد المومني",
+      role: "عمّان، الأردن",
+    },
+  ],
+  logos: ["Booking", "Agoda", "Expedia", "Trivago", "Airbnb"],
+  newsletterTitle: "اشترك لتصلك أحدث العروض والأخبار من TalkToBook",
+  newsletterCta: "اشترك",
+  newsletterPlaceholder: "بريدك الإلكتروني",
   stats: [
     { value: "+١ مليون", label: "فندق حول العالم" },
     { value: "٣", label: "خيارات منتقاة لكل بحث" },
@@ -181,13 +224,37 @@ const EN: LandingCopy = {
   tagline: "Book your hotel in Arabic — talk to us like you'd talk to a friend",
   ctaStart: "Start now",
   ctaTry: "Try it",
-  heroTitle: "Describe your trip in Arabic, get the best 3 hotels",
+  heroEyebrow: "Best destinations around the world",
+  heroTitle: "Travel, enjoy,\nand live a new full life",
   heroSubtitle:
-    "No complicated filter menus. Type what you want in plain language, and the AI understands and picks the best fit — with an honest Arabic summary of guest reviews.",
+    "Describe your trip in Arabic and let the AI pick the best 3 hotels — with an honest summary of guest reviews. No filter menus, no hassle.",
+  heroImage: PHOTO.hero,
   heroPlaceholder: "e.g. Halal hotel in Dubai, 3 nights, 2 adults, budget $150",
   heroDemoUser:
     "I want a hotel in Dubai for a week in July — me, my wife and three kids, budget $150, halal and near the souk",
   heroDemoAI: "Great! Let me find the best halal, family-friendly options in Dubai…",
+  servicesEyebrow: "Category",
+  destEyebrow: "Top selling",
+  stepsEyebrow: "Easy and fast",
+  stepsTitle: "Book your next trip\nin 3 easy steps",
+  testimonialsEyebrow: "Testimonials",
+  testimonialsTitle: "What people say about us",
+  testimonials: [
+    {
+      quote: "Easiest booking I've tried. I typed my request in Arabic and got 3 spot-on hotels instantly.",
+      name: "Nour Al-Otaibi",
+      role: "Riyadh, Saudi Arabia",
+    },
+    {
+      quote: "I love that it gets my dialect and gives an honest review summary. Saved me hours of searching.",
+      name: "Khalid Al-Momani",
+      role: "Amman, Jordan",
+    },
+  ],
+  logos: ["Booking", "Agoda", "Expedia", "Trivago", "Airbnb"],
+  newsletterTitle: "Subscribe to get the latest offers and news from TalkToBook",
+  newsletterCta: "Subscribe",
+  newsletterPlaceholder: "Your email",
   stats: [
     { value: "1M+", label: "hotels worldwide" },
     { value: "3", label: "curated picks per search" },

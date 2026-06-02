@@ -1,46 +1,57 @@
-// TalkToBook landing — popular destinations as an infinite marquee of photo
-// cards. Tapping a card jumps into the chat with that trip prefilled.
+// TalkToBook landing — "Top Destinations" (Jadoo-style): 3 tall photo cards
+// with a name + a friendly "tap to plan" line. Tapping prefills the chat.
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { useLanding } from "@/lib/i18n";
 import { MapPin } from "lucide-react";
-import { Reveal } from "@/components/motion/Reveal";
-import Marquee from "@/components/motion/Marquee";
+import { Reveal, Stagger, RevealItem } from "@/components/motion/Reveal";
 
 export default function PopularDestinations() {
   const { copy } = useLanding();
+  const cards = copy.destinations.slice(0, 3);
 
   return (
-    <section className="bg-panel py-20">
-      <Reveal className="mx-auto mb-10 max-w-5xl px-6 text-center">
-        <h2 className="font-display text-3xl text-ink sm:text-4xl">{copy.destTitle}</h2>
-        <p className="mt-2 text-ink-soft">{copy.destSubtitle}</p>
-      </Reveal>
+    <section className="bg-white py-20">
+      <div className="mx-auto max-w-6xl px-6">
+        <Reveal className="mb-12 text-center">
+          <p className="text-sm font-bold uppercase tracking-wide text-ink-soft">
+            {copy.destEyebrow}
+          </p>
+          <h2 className="mt-2 font-display text-3xl text-ink sm:text-4xl">
+            {copy.destTitle}
+          </h2>
+        </Reveal>
 
-      <Marquee durationSec={45}>
-        {copy.destinations.map((d) => (
-          <Link
-            key={d.name}
-            href={`/chat?q=${encodeURIComponent(d.query)}`}
-            className="group relative block h-56 w-72 shrink-0 overflow-hidden rounded-2xl shadow-card transition-shadow hover:shadow-card-hover"
-          >
-            <Image
-              src={d.img}
-              alt={d.name}
-              fill
-              sizes="288px"
-              className="object-cover transition-transform duration-700 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/15 to-transparent" />
-            <div className="absolute bottom-0 start-0 flex items-center gap-1.5 p-4 text-white">
-              <MapPin className="h-4 w-4 text-gold" strokeWidth={2} />
-              <span className="text-lg font-bold">{d.name}</span>
-            </div>
-          </Link>
-        ))}
-      </Marquee>
+        <Stagger className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+          {cards.map((d) => (
+            <RevealItem key={d.name}>
+              <Link
+                href={`/chat?q=${encodeURIComponent(d.query)}`}
+                className="group block overflow-hidden rounded-3xl bg-white shadow-card transition-all hover:-translate-y-2 hover:shadow-card-hover"
+              >
+                <div className="relative h-56 w-full overflow-hidden">
+                  <Image
+                    src={d.img}
+                    alt={d.name}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 360px"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                </div>
+                <div className="flex items-center justify-between p-5">
+                  <span className="text-lg font-bold text-ink">{d.name}</span>
+                  <span className="flex items-center gap-1.5 text-sm font-medium text-primary">
+                    <MapPin className="h-4 w-4" strokeWidth={2} />
+                    {copy.ctaTry}
+                  </span>
+                </div>
+              </Link>
+            </RevealItem>
+          ))}
+        </Stagger>
+      </div>
     </section>
   );
 }
